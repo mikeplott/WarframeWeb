@@ -12,7 +12,8 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, String category, String voidRelic) {
+    public Item(int id, String name, String category, String voidRelic) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.voidRelic = voidRelic;

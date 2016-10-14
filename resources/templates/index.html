@@ -5,10 +5,21 @@
     <title>Title</title>
 </head>
 <body>
+{{^name}}
 <form method="post" action="/login">
 <input type="text" placeholder="Enter username" name="name"><br>
 <input type="password" placeholder="Enter your password" name="pass"><br>
-<button type="submit">Sumbit</button>
+<button type="submit">Submit</button>
 </form>
+{{/name}}
+{{#name}}
+Welcome {{name}}!
+<form method="post" action="/logout">
+    <button type="submit">Logout</button>
+</form>
+
+{{/name}}
 </body>
 </html>
+
+<!-- silicon harbor mag -->
