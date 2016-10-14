@@ -1,12 +1,10 @@
 package com.company;
 
 import org.junit.Test;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
 /**
@@ -34,22 +32,47 @@ public class MainTest {
         Connection conn = startConnection();
         Main.insertUser(conn, "Mike", "123");
         User user = Main.selectUser(conn, "Mike");
-        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", user.id);
-        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", user.id);
+        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 3, user.id);
+        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
         ArrayList userItems = Main.userList(conn, user.id);
         conn.close();
         assertTrue(userItems.size() == 2);
     }
 
     @Test
-    public void selectUserItem() throws SQLException {
+    public void testSelectUserItem() throws SQLException {
         Connection conn = startConnection();
         Main.insertUser(conn, "Mike", "123");
         User user = Main.selectUser(conn, "Mike");
-        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", user.id);
-        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", user.id);
+        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 3, user.id);
+        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
         Item item = Main.selectUserItem(conn, 1);
         conn.close();
         assertTrue(item != null);
     }
+
+    @Test
+    public void testInsertItem() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertItem(conn, "lsjdf", "ljkdalf", "adjflaf");
+        Main.insertItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja");
+        Item item = Main.selectItem(conn, 1);
+        conn.close();
+        assertTrue(item != null);
+    }
+
+//    @Test
+//    public void testDelete() throws SQLException {
+//        Connection conn = startConnection();
+//        Main.insertUser(conn, "Mike", "123");
+//        User user = Main.selectUser(conn, "Mike");
+//        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", user.id);
+//        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", user.id);
+//        Item item = Main.selectUserItem(conn, 1);
+//        if (item.userID == user.id) {
+//            Main.deleteUserItem(conn, item.id);
+//        }
+//        ArrayList<Item> userItems = Main.userList(conn, user.id);
+//        assertTrue(userItems.size() == 1);
+//    }
 }

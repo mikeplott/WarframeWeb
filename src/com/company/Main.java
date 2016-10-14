@@ -5,25 +5,35 @@ import spark.ModelAndView;
 import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, FileNotFoundException {
         Server.createWebServer().start();
         Connection conn = DriverManager.getConnection("jdbc:h2:./warframe");
-
+        createTables(conn);
+        //fileImport(conn);
 
         Spark.get(
                 "/",
                 (request, response) -> {
                     Session session = request.session();
                     String name = session.attribute("loginName");
-
+                    User user = selectUser(conn, name);
+                    ArrayList<Item> itemList = itemsList(conn);
                     HashMap m = new HashMap();
+                    if (user != null) {
+                        ArrayList<Item> userItems = userList(conn, user.id);
+                        m.put("userItems", userItems);
+                    }
                     m.put("name", name);
+                    m.put("items", itemList);
                     return new ModelAndView(m, "index.html");
                 },
                 new MustacheTemplateEngine()
@@ -54,6 +64,56 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     session.invalidate();
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/add-item",
+                (request, response) -> {
+                    String id = request.queryParams("id");
+                    int itemID = Integer.parseInt(id);
+                    String num = request.queryParams("quantity");
+                    int quantity = Integer.parseInt(num);
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                        return null;
+                    }
+                    Item item = selectItem(conn, itemID);
+                    insertUserItem(conn, item.name, item.category, item.voidRelic, quantity, user.id);
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/delete-item",
+                (request, response) -> {
+                    String id = request.queryParams("id");
+                    int itemID = Integer.parseInt(id);
+                    System.out.println(itemID);
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                        response.redirect("/");
+                    }
+                    ArrayList<Item> userItems = userList(conn, user.id);
+                    System.out.println(userItems);
+                    for (int i = 0; i < userItems.size(); i++) {
+                        if (userItems.get(i).id == itemID) {
+                            Item item = userItems.get(i);
+                            System.out.println(item.userID);
+                            if (item.userID == user.id) {
+                                deleteUserItem(conn, item.id);
+                            }
+                        }
+                    }
                     response.redirect("/");
                     return null;
                 }
@@ -104,7 +164,9 @@ public class Main {
             String name = results.getString("name");
             String category = results.getString("category");
             String relic = results.getString("void_relic");
-            userList.add(new Item(itemId, name, category, relic));
+            int quantity = results.getInt("quantity");
+            int userID = results.getInt("user_id");
+            userList.add(new Item(itemId, name, category, relic, quantity, userID));
         }
         return userList;
     }
@@ -137,20 +199,52 @@ public class Main {
         return null;
     }
 
-    public static void insertUserItem(Connection conn, String name, String category, String relic, int uid) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO user_items VALUES(NULL, ?, ?, ?, ?)");
+    public static void insertUserItem(Connection conn, String name, String category, String relic, int quantity, int uid) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO user_items VALUES(NULL, ?, ?, ?, ?, ?)");
         stmt.setString(1, name);
         stmt.setString(2, category);
         stmt.setString(3, relic);
-        stmt.setInt(4, uid);
+        stmt.setInt(4, quantity);
+        stmt.setInt(5, uid);
         stmt.execute();
     }
 
     public static void createTables(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         stmt.execute("CREATE TABLE IF NOT EXISTS users (id IDENTITY, name VARCHAR, password VARCHAR)");
-        stmt.execute("CREATE TABLE IF NOT EXISTS user_items (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR, user_id INT)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS user_items (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR, quantity INT, user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS item_list (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR)");
+    }
+
+    public static void insertItem(Connection conn, String name, String category, String relic) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO item_list VALUES(NULL, ?, ?, ?)");
+        stmt.setString(1, name);
+        stmt.setString(2, category);
+        stmt.setString(3, relic);
+        stmt.execute();
+    }
+
+    public static void deleteUserItem(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_items WHERE user_items.id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+    public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {
+        File f = new File("items.txt");
+        Scanner fileScanner = new Scanner(f);
+        while (fileScanner.hasNext()) {
+            String line = fileScanner.nextLine();
+            String[] columns = line.split("\\|");
+            String name = columns[0];
+            String category = columns[1];
+            String relic = columns[2];
+            if (relic.isEmpty()) {
+                relic = null;
+                insertItem(conn, name, category, relic);
+            }
+            insertItem(conn, name, category, relic);
+        }
     }
 
 }

@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #tables {
+            display: inline-block;
+            position: relative;
+        }
+        #itemList {
+            float: left;
+        }
+    </style>
 </head>
 <body>
 {{^name}}
@@ -17,7 +26,61 @@ Welcome {{name}}!
 <form method="post" action="/logout">
     <button type="submit">Logout</button>
 </form>
-
+<br>
+<br>
+<br>
+<div id="tables">
+<table align="left" width="600px" border="1px" id="itemList">
+    <th colspan="5">Game Items</th>
+        <tr>
+            <td>Item Name</td>
+            <td>Category</td>
+            <td>Void Relic</td>
+            <td>Quantity</td>
+            <td></td>
+        </tr>
+    {{#items}}
+        <tr>
+            <td width="250px">{{name}}</td>
+            <td>{{category}}</td>
+            <td width="250px">{{voidRelic}}</td>
+            <form method="post" action="/add-item">
+            <td>
+                <input type="number" name="quantity" min="1" max="1000">
+            </td>
+            <td>
+                <input type="hidden" value="{{id}}" name="id">
+                <button type="submit">Add</button>
+            </form>
+            </td>
+        </tr>
+    {{/items}}
+</table>
+<table  width="800px" border="1px" id="userList">
+    <th colspan="5">{{name}}'s Items</th>
+        <tr>
+            <td>Item Name</td>
+            <td>Category</td>
+            <td>Void Relic</td>
+            <td>Quantity</td>
+            <td></td>
+        </tr>
+    {{#userItems}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{category}}</td>
+        <td>{{voidRelic}}</td>
+        <td>{{quantity}}</td>
+        <td>
+        <form method="post" action="/delete-item">
+            <input type="hidden" value="{{id}}" name="id">
+            <button type="submit">Delete</button>
+        </form>
+        </td>
+    </tr>
+    {{/userItems}}
+</table>
+</div>
 {{/name}}
 </body>
 </html>

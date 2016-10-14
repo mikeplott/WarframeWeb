@@ -1,0 +1,174 @@
+Boar Prime Blueprint|Primary|Neo D1
+Boar Prime Barrel|Primary|Axi V2
+Boar Prime Receiver|Primary|Lith M1
+Boar Prime Stock|Primary|Meso B1
+Boltor Prime Blueprint|Primary| ""
+Boltor Prime Barrel|Primary| ""
+Boltor Prime Receiver|Primary| ""
+Boltor Prime Stock|Primary| ""
+Braton Prime Blueprint|Primary|Axi N1 Meso V1|
+Braton Prime Barrel|Primary|Lith A1|
+Braton Prime Receiver|Primary|Axi V2 Axi V3|
+Braton Prime Stock|Primary|Axi A1 Meso N1 Neo V2|
+Burston Prime Blueprint|Primary|Meso V1|
+Burston Prime Barrel|Primary|Axi T1 Lith F2|
+Burston Prime Receiver|Primary|Neo S3|
+Burston Prime Stock|Primary|Lith K1 Lith V1 Neo S2|
+Latron Prime Blueprint|Primary| ""
+Latron Prime Barrel|Primary| ""
+Latron Prime Receiver|Primary| ""
+Latron Prime Stock|Primary| ""
+Paris Prime Blueprint|Primary|Axi G1 Lith F1 Meso S1 Meso V2
+Paris Prime Grip|Primary|Lith S1 Meso S2
+Paris Prime String|Primary|Lith S1 Lith S3 Meso S2 Neo N3 Neo V3
+Paris Prime Upper Limb|Primary|Axi N3 Lith F2 Lith V1 Meso S1 Neo S2
+Paris Prime Lower Limb|Primary|Lith V1 Meso F1 Neo S2
+Soma Prime Blueprint|Primary|Lith M1 Neo S1
+Soma Prime Barrel|Primary|Neo S3
+Soma Prime Receiver|Primary|Lith S3 Neo N1
+Soma Prime Stock|Primary|Lith S2 Meso S1
+Tigris Prime Blueprint|Primary|Axi T1
+Tigris Prime Barrel|Primary|Lith K1
+Tigris Prime Stock|Primary|Meso S1
+Tigris Prime Receiver|Primary|Neo V3
+Vectis Prime Blueprint|Primary|Lith A1
+Vectis Prime Barrel|Primary|Axi T1
+Vectis Prime Receiver|Primary|Meso V1
+Vectis Prime Stock|Primary|Axi V2 Axi V3
+Akbronco Prime Blueprint|Secondary|Lith S2 Lith S3
+Akbronco Prime Link|Secondary|Axi S1 Lith N1
+Akstiletto Prime Blueprint|Secondary|Lith A1
+Akstiletto Prime Barrel|Secondary|Axi A1
+Akstiletto Prime Receiver|Secondary|Axi K1 Axi T1
+Akstiletto Prime Link|Secondary|Axi N1
+Bronco Prime Blueprint|Secondary|Axi N2 Axi S1 Lith N1 Lith S1 Meso N2 Meso S2
+Bronco Prime Barrel|Secondary|Axi N3 Neo V1
+Bronco Prime Receiver|Secondary|Axi S1 Meso F1
+Hikou Prime Blueprint|Secondary|Lith S1 Meso N2
+Hikou Prime Pouch|Secondary|Axi K1 Axi V2
+Hikou Prime Stars|Secondary|Lith F2 Neo N1
+Lato Prime Blueprint|Secondary| ""
+Lato Prime Barrel|Secondary| ""
+Lato Prime Receiver|Secondary| ""
+Lex Prime Blueprint|Secondary|Meso D1 Neo N2
+Lex Prime Barrel|Secondary|Axi K1 Neo N3 Neo S1
+Lex Prime Receiver|Secondary|Axi N2 Lith M1
+Sicarus Prime Blueprint|Secondary| ""
+Sicarus Prime Barrel|Secondary| ""
+Sicarus Prime Receiver|Secondary| ""
+Spira Prime Blueprint|Secondary|Meso V1
+Spira Prime Pouch|Secondary|Lith S1 Lith S3
+Spira Prime Blade|Secondary|Neo S3
+Vasto Prime Blueprint|Secondary|Neo S3
+Vasto Prime Barrel|Secondary|Axi V3 Neo D1 Neo N2
+Vasto Prime Receiver|Secondary|Lith A1 Meso V2
+Ankyros Prime Blueprint|Melee| ""
+Ankyros Prime Blade|Melee| ""
+Ankyros Prime Gauntlet|Melee| ""
+Bo Prime Blueprint|Melee| ""
+Bo Prime Ornament|Melee| ""
+Bo Prime Handle|Melee| ""
+Dakra Prime Blueprint|Melee|Lith M1
+Dakra Prime Blade|Melee|Neo D1
+Dakra Prime Handle|Melee|Meso B1
+Dual Kamas Prime Blueprint|Melee|Axi N3 Axi V1 Neo V1
+Dual Kamas Prime Blade|Melee|Meso D1
+Dual Kamas Prime Handle|Melee|Axi A1 Meso F1 Meso N1
+Fang Prime Blueprint|Melee|Lith K1 Meso N1 Neo N2
+Fang Prime Blade|Melee|Axi N1 Lith C1 Lith F1 Lith N1
+Fang Prime Handle|Melee|Lith F2 Meso N1 Meso N2 Neo N3 Neo V2
+Fragor Prime Blueprint|Melee|Lith F1 Meso F1
+Fragor Prime Head|Melee|Axi A1
+Fragor Prime Handle|Melee|Lith V1
+Galatine Prime Blueprint|Melee|Axi G1
+Galatine Prime Blade|Melee|Meso S2 Neo V2 Neo V3
+Galatine Prime Handle|Melee|Neo V2
+Glaive Prime Blueprint|Melee| ""
+Glaive Prime Blade|Melee| ""
+Glaive Prime Disc|Melee| ""
+Nikana Prime Blueprint|Melee|Axi A1
+Nikana Prime Blade|Melee|Meso V2
+Nikana Prime Hilt|Melee|Axi N2
+Orthos Prime Blueprint|Melee|Axi V3 Meso B1
+Orthos Prime Blade|Melee|Meso D1
+Orthos Prime Handle|Melee|Meso B1 Meso D1
+Reaper Prime Blueprint|Melee| ""
+Reaper Prime Blade|Melee| ""
+Reaper Prime Handle|Melee| ""
+Scindo Prime Blueprint|Melee|Lith F1
+Scindo Prime Blade|Melee|Axi S1
+Scindo Prime Handle|Melee|Meso C1
+Skana Prime Blueprint|Melee| ""
+Skana Prime Blade|Melee| ""
+Skana Prime Hilt|Melee| ""
+Carrier Prime Blueprint|Companion|Meso V1 Neo S3
+Carrier Prime Neuroptics Blueprint|Companion|Lith C1 Meso C1
+Carrier Prime Systems Blueprint|Companion|Axi V1 Lith S2 Lith S3 Neo V3
+Carrier Prime Chasis Blueprint|Companion|Axi N2 Neo S1
+Wyrm Prime Blueprint|Companion| ""
+Wyrm Prime Neuroptics Blueprint|Companion| ""
+Wyrm Prime Systems Blueprint|Companion| ""
+Wyrm Prime Chasis Blueprint|Companion| ""
+Kavasa Prime Collar Blueprint|Companion|Axi G1 Neo N1
+Kavasa Prime Band|Companion|Lith C1 Lith S2
+Kavasa Prime Buckle|Companion|Axi K1 Lith K1
+Odonata Prime Blueprint|Archwings|Lith F1 Meso S1
+Odonata Prime Harness Blueprint|Archwings|Axi K1 Axi T1 Lith K1
+Odonata Prime Wings Blueprint|Archwings|Axi N1
+Odonata Prime Systems Blueprint|Archwings|Axi V1 Lith F2 Neo N3
+Ash Prime Blueprint|Warframe|Lith S3 Meso C1
+Ash Prime Chasis Blueprint|Warframe|Meso V2
+Ash Prime Systems Blueprint|Warframe|Axi N1
+Ash Prime Neuroptics Blueprint|Warframe|Axi N2 Meso N2 Neo N3
+Ember Prime Blueprint|Warframe| ""
+Ember Prime Chasis Blueprint|Warframe| ""
+Ember Prime Systems Blueprint|Warframe| ""
+Ember Prime Neuroptics Blueprint|Warframe| ""
+Excalibur Prime Blueprint|Warframe| ""
+Excalibur Prime Chasis Blueprint|Warframe| ""
+Excalibur Prime Systems Blueprint|Warframe| ""
+Excalibur Prime Neuroptics Blueprint|Warframe| ""
+Frost Prime Blueprint|Warframe| ""
+Frost Prime Chasis Blueprint|Warframe| ""
+Frost Prime Systems Blueprint|Warframe| ""
+Frost Prime Neuroptics Blueprint|Warframe| ""
+Loki Prime Blueprint|Warframe| ""
+Loki Prime Chasis Blueprint|Warframe| ""
+Loki Prime Systems Blueprint|Warframe| ""
+Loki Prime Neuroptics Blueprint|Warframe| ""
+Mag Prime Blueprint|Warframe|Lith M1
+Mag Prime Chasis Blueprint|Warframe|Meso B1
+Mag Prime Systems Blueprint|Warframe|Neo D1
+Mag Prime Neuroptics Blueprint|Warframe|Axi V2
+Nekros Prime Blueprint|Warframe|Axi N3
+Nekros Prime Chasis Blueprint|Warframe|Axi G1 Lith N1
+Nekros Prime Systems Blueprint|Warframe|Neo N3
+Nekros Prime Neuroptics Blueprint|Warframe|Meso F1
+Nova Prime Blueprint|Warframe|Neo N2
+Nova Prime Chasis Blueprint|Warframe|Lith N1 Neo V1
+Nova Prime Systems Blueprint|Warframe|Lith C1 Meso S1 Neo S2
+Nova Prime Neuroptics Blueprint|Warframe|Lith C1 Meso C1
+Nyx Prime Blueprint|Warframe|Lith S2 Neo V1
+Nyx Prime Chasis Blueprint|Warframe|Neo N1
+Nyx Prime Systems Blueprint|Warframe|Neo S2
+Nyx Prime Neuroptics Blueprint|Warframe|Meso N1
+Rhino Prime Blueprint|Warframe| ""
+Rhino Prime Chasis Blueprint|Warframe| ""
+Rhino Prime Systems Blueprint|Warframe| ""
+Rhino Prime Neuroptics Blueprint|Warframe| ""
+Saryn Prime Blueprint|Warframe|Neo S1
+Saryn Prime Chasis Blueprint|Warframe|Meso S2 Neo S2
+Saryn Prime Systems Blueprint|Warframe|Axi G1 Axi T1 Meso C1 Meso F1
+Saryn Prime Neuroptics Blueprint|Warframe|Lith A1
+Trinity Prime Blueprint|Warframe|Axi S1, Lith K1
+Trinity Prime Chasis Blueprint|Warframe|Neo S1
+Trinity Prime Systems Blueprint|Warframe|Axi A1 Axi V2 Axi V3
+Trinity Prime Neuroptics Blueprint|Warframe|Axi V3 Neo D1
+Vauban Prime Blueprint|Warframe|Lith F2 Neo V2
+Vauban Prime Chasis Blueprint|Warframe|Axi V1
+Vauban Prime Systems Blueprint|Warframe|Neo N2
+Vauban Prime Neuroptics Blueprint|Warframe|Meso N2 Neo V3
+Volt Prime Blueprint|Warframe|Axi N3 Neo V1
+Volt Prime Chasis Blueprint|Warframe|Meso V2
+Volt Prime Systems Blueprint|Warframe|Lith V1
+Volt Prime Neuroptics Blueprint|Warframe|Axi V1
