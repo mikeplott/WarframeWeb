@@ -133,6 +133,23 @@ public class Main {
                 },
                 new MustacheTemplateEngine()
         );
+
+        Spark.post(
+                "/edit-item",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    String id = request.queryParams("id");
+                    String num = request.queryParams("quantity");
+                    int quantity = Integer.parseInt(num);
+                    int itemID = Integer.parseInt(id);
+                    //User user = selectUser(conn, name);
+                    Item item = selectUserItem(conn, itemID);
+                    updateUserItem(conn, quantity, item.id);
+                    response.redirect("/edit-item");
+                    return null;
+                }
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -242,6 +259,13 @@ public class Main {
     public static void deleteUserItem(Connection conn, int id) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM user_items WHERE user_items.id = ?");
         stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+    public static void updateUserItem(Connection conn, int quantity, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("UPDATE user_items SET quantity = ? WHERE user_items.id = ?");
+        stmt.setInt(1, quantity);
+        stmt.setInt(2, id);
         stmt.execute();
     }
 

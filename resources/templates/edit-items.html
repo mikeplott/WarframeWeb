@@ -20,7 +20,8 @@ Welcome {{name}}!
             <td>{{quantity}}</td>
             <td>
                 <form method="post" action="/edit-item">
-                    <input type="number" min="1" max="1000">
+                    <input type="number" min="1" max="1000" name="quantity">
+                    <input type="hidden" value="{{id}}" name="id">
                     <button type="submit">Update</button>
                 </form>
             </td>
