@@ -3,23 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="main.css">
     <style>
-        #tables {
-            display: inline-block;
-            position: relative;
+    body {
+        background-color: white;
+
+    }
+    img {
+        height:400px;
+        width: 400px;
+        margin-top: 5%;
+        border: 2px solid white;
+        border-radius: 5px;
+    }
+     div {
+        width: 420px;
+        margin: auto;
+        margin-top: 5%;
+        border: 2px solid green;
+        border-radius: 5px;
+        box-shadow: 10px 10px 10px black;
+    }
+    button {
+        height: 30px;
+        width: 60px;
+        background-color: blue;
+        font-weight: bold;
+        color: white
+    }
+
+</style>
+    <script>
+        function rowStyle(){
+            var mySelection = document.getElementById("itemList");
+            var myRows = document.getElementsByTagName('tr');
+            for(i = 0; i < myRows.length; i++){
+              if(i % 2 === 0){
+                tr.style.backgroundColor="white";
+                tr.style.color="black";
+              }
+              else{
+                tr.style.backgroundColor="#ccccff";
+                tr.style.color="black";
+              }
+            }
         }
-        #itemList {
-            float: left;
-        }
-    </style>
+    </script>
 </head>
 <body>
 {{^name}}
+<div align="center">
+<table align="center" id="login">
 <form method="post" action="/login">
-<input type="text" placeholder="Enter username" name="name"><br>
-<input type="password" placeholder="Enter your password" name="pass"><br>
-<button type="submit">Submit</button>
+    <tr>
+
+        <td><input type="text" placeholder="Enter username" name="name"></td>
+        <td><input type="password" placeholder="Enter your password" name="pass"></td>
+        <td><button type="submit">Submit</button></td>
+
+    </tr>
 </form>
+    <tr>
+        <td colspan="3">
+            <img src="https://66.media.tumblr.com/5a2077a3d31b6e4a77f31ba6d81d8237/tumblr_o8un4fvHBV1vv76bbo1_1280.jpg">
+        </td>
+    </tr>
+</table>
+</div>
 {{/name}}
 {{#name}}
 Welcome {{name}}!
@@ -29,8 +79,7 @@ Welcome {{name}}!
 <br>
 <br>
 <br>
-<div id="tables">
-<table align="left" width="600px" border="1px" id="itemList">
+<table align="left" width="600px" border="1px" id="itemList" onload="rowStyle">
     <th colspan="6">Game Items</th>
         <tr>
             <td>Item Name</td>
@@ -86,7 +135,6 @@ Welcome {{name}}!
     </tr>
     {{/userItems}}
 </table>
-</div>
 {{/name}}
 </body>
 </html>
