@@ -95,7 +95,6 @@ public class Main {
                 (request, response) -> {
                     String id = request.queryParams("id");
                     int itemID = Integer.parseInt(id);
-                    System.out.println(itemID);
                     Session session = request.session();
                     String name = session.attribute("loginName");
                     User user = selectUser(conn, name);
@@ -104,11 +103,9 @@ public class Main {
                         response.redirect("/");
                     }
                     ArrayList<Item> userItems = userList(conn, user.id);
-                    System.out.println(userItems);
                     for (int i = 0; i < userItems.size(); i++) {
                         if (userItems.get(i).id == itemID) {
                             Item item = userItems.get(i);
-                            System.out.println(item.userID);
                             if (item.userID == user.id) {
                                 deleteUserItem(conn, item.id);
                             }
@@ -139,11 +136,14 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
                     String id = request.queryParams("id");
                     String num = request.queryParams("quantity");
                     int quantity = Integer.parseInt(num);
                     int itemID = Integer.parseInt(id);
-                    //User user = selectUser(conn, name);
                     Item item = selectUserItem(conn, itemID);
                     updateUserItem(conn, quantity, item.id);
                     response.redirect("/edit-item");

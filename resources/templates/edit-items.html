@@ -6,13 +6,16 @@
 </head>
 <body>
 Welcome {{name}}!
+<br>
+<br>
+<a href="/">Home</a>
 
-{{#userItems}}
-<table>
+<table align="center" border="1px" width="800px">
     <th>Item Name</th>
     <th>Category</th>
     <th>Void Relic</th>
     <th>Quantity</th>
+    {{#userItems}}
         <tr>
             <td>{{name}}</td>
             <td>{{category}}</td>
@@ -26,7 +29,7 @@ Welcome {{name}}!
                 </form>
             </td>
         </tr>
+    {{/userItems}}
 </table>
-{{/userItems}}
 </body>
 </html>
