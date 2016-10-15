@@ -31,7 +31,7 @@ Welcome {{name}}!
 <br>
 <div id="tables">
 <table align="left" width="600px" border="1px" id="itemList">
-    <th colspan="5">Game Items</th>
+    <th colspan="6">Game Items</th>
         <tr>
             <td>Item Name</td>
             <td>Category</td>
@@ -57,13 +57,13 @@ Welcome {{name}}!
     {{/items}}
 </table>
 <table  width="800px" border="1px" id="userList">
-    <th colspan="5">{{name}}'s Items</th>
+    <th colspan="6">{{name}}'s Items</th>
         <tr>
             <td>Item Name</td>
             <td>Category</td>
             <td>Void Relic</td>
             <td>Quantity</td>
-            <td></td>
+            <td colspan="2">Modify</td>
         </tr>
     {{#userItems}}
     <tr>
@@ -71,6 +71,12 @@ Welcome {{name}}!
         <td>{{category}}</td>
         <td>{{voidRelic}}</td>
         <td>{{quantity}}</td>
+        <td>
+            <form method="get" action="/edit-item">
+                <input type="hidden" value="{{id}}" name="editID">
+                <button type="submit">Edit</button>
+            </form>
+        </td>
         <td>
         <form method="post" action="/delete-item">
             <input type="hidden" value="{{id}}" name="id">

@@ -118,6 +118,21 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.get(
+                "/edit-item",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    ArrayList<Item> userList = userList(conn, user.id);
+                    HashMap m = new HashMap();
+                    m.put("name", user.name);
+                    m.put("userItems", userList);
+                    return new ModelAndView(m, "edit-items.html");
+                },
+                new MustacheTemplateEngine()
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {

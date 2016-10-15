@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Welcome {{name}}!
+
+{{#userItems}}
+<table>
+    <th>Item Name</th>
+    <th>Category</th>
+    <th>Void Relic</th>
+    <th>Quantity</th>
+        <tr>
+            <td>{{name}}</td>
+            <td>{{category}}</td>
+            <td>{{voidRelic}}</td>
+            <td>{{quantity}}</td>
+            <td>
+                <form method="post" action="/edit-item">
+                    <input type="number" min="1" max="1000">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+</table>
+{{/userItems}}
+</body>
+</html>
