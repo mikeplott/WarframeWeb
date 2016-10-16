@@ -161,7 +161,8 @@ public class Main {
                     Session session = request.session();
                     String name = session.attribute("loginName");
                     HashMap m = new HashMap();
-                    return new ModelAndView(null, "forum.html");
+                    m.put("name", name);
+                    return new ModelAndView(m, "forum.html");
                 },
                 new MustacheTemplateEngine()
         );
@@ -262,7 +263,7 @@ public class Main {
         stmt.execute("CREATE TABLE IF NOT EXISTS user_items (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR, quantity INT, user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS item_list (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR)");
         stmt.execute("CREATE TABLE IF NOT EXISTS messages (id IDENTITY, text VARCHAR, author VARCHAR, user_id INT)");
-        stmt.execute("CREATE TABLE IF NOT EXISTS replies (id IDENTITY, text VARCHAR, author VARCHAR, user_id INT)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS replies (id IDENTITY, text VARCHAR, author VARCHAR, message_id INT ,user_id INT)");
     }
 
     public static void insertItem(Connection conn, String name, String category, String relic) throws SQLException {
@@ -303,7 +304,31 @@ public class Main {
             String text = results.getString("text");
             String author = results.getString("author");
             int uID = results.getInt("user_id");
-            return new Message(mID, text, author, new ArrayList<Reply>(), uID);
+            return new Message(mID, text, author, new ArrayList<>(), uID);
+        }
+        return null;
+    }
+
+    public static void insertReply(Connection conn, String text, String author, int mID,int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO replies VALUES(NULL, ?, ?, ?, ?)");
+        stmt.setString(1, text);
+        stmt.setString(2, author);
+        stmt.setInt(3, mID);
+        stmt.setInt(4, uID);
+        stmt.execute();
+    }
+
+    public static Reply selectReply(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM replies WHERE message_id = ?");
+        stmt.setInt(1, id);
+        ResultSet results = stmt.executeQuery();
+        if (results.next()) {
+            int rID = results.getInt("id");
+            String text = results.getString("text");
+            String author = results.getString("author");
+            int mID = results.getInt("message_id");
+            int uID = results.getInt("user_id");
+            return new Reply(rID, text, author, mID, uID);
         }
         return null;
     }
