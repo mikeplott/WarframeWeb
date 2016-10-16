@@ -68,6 +68,7 @@ public class MainTest {
         User user = Main.selectUser(conn, "Mike");
         Main.insertMessage(conn, "Hello!", user.name, user.id);
         Message message = Main.selectMessage(conn, user.id);
+        conn.close();
         assertTrue(message != null);
     }
 
@@ -80,6 +81,7 @@ public class MainTest {
         Message message = Main.selectMessage(conn, user.id);
         Main.insertReply(conn, "Oh hi there!", user.name, message.id, user.id);
         Reply reply = Main.selectReply(conn, message.id);
+        conn.close();
         assertTrue(reply != null);
     }
 
