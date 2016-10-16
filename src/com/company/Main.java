@@ -161,7 +161,9 @@ public class Main {
                     Session session = request.session();
                     String name = session.attribute("loginName");
                     HashMap m = new HashMap();
+                    ArrayList<Message> messages = selectAllMessages(conn);
                     m.put("name", name);
+                    m.put("messages", messages);
                     return new ModelAndView(m, "forum.html");
                 },
                 new MustacheTemplateEngine()
@@ -172,12 +174,52 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    String text = request.queryParams("message");
+                    insertMessage(conn, text, user.name, user.id);
+                    response.redirect("/forum");
+                    return null;
+                }
+        );
 
+        Spark.get(
+                "/message",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    String id = request.queryParams("id");
+                    int mID = Integer.parseInt(id);
+                    Message message = selectMessageById(conn, mID);
                     HashMap m = new HashMap();
-                    m.put("name", name);
-                    return new ModelAndView(m, "forum.html");
+                    m.put("message", message);
+                    m.put("replies", message.replies);
+                    return new ModelAndView(m, "replies.html");
                 },
                 new MustacheTemplateEngine()
+        );
+
+        Spark.post(
+                "/message",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    String id = request.queryParams("id");
+                    int mID = Integer.parseInt(id);
+                    String repText = request.queryParams("repText");
+                    Message message = selectMessageById(conn, mID);
+                    Reply reply = new Reply(repText, user.name, mID, user.id);
+                    insertReply(conn, repText, user.name, mID, user.id);
+                    message.replies.add(reply);
+                    response.redirect("/forum");
+                    return null;
+                }
         );
     }
 
@@ -377,6 +419,20 @@ public class Main {
             messages.add(message);
         }
         return messages;
+    }
+
+    public static Message selectMessageById(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM messages WHERE id = ?");
+        stmt.setInt(1, id);
+        ResultSet results = stmt.executeQuery();
+        if (results.next()) {
+            String text = results.getString("text");
+            String author = results.getString("author");
+            ArrayList replies = selectAllReplies(conn, id);
+            int uID = results.getInt("user_id");
+            return new Message(id, text, author, replies, uID);
+        }
+        return null;
     }
 
     public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {

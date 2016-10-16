@@ -15,6 +15,13 @@ public class Message {
     public Message() {
     }
 
+    public Message(String text, String author, ArrayList<Reply> replies, int userID) {
+        this.text = text;
+        this.author = author;
+        this.replies = replies;
+        this.userID = userID;
+    }
+
     public Message(int id, String text, String author, int userID) {
         this.id = id;
         this.text = text;

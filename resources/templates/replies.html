@@ -1,0 +1,35 @@
+<html>
+<body>
+<h3 align="center">Message replies</h3>
+<br>
+<br>
+<br>
+{{#message}}
+<table align="center">
+    <th>Type your reply!</th>
+    <td>
+        <form action="/message" method="post">
+            <input type="hidden" value="{{id}}" name="id">
+            <input type="text" name="repText">
+        </form>
+    </td>
+    <td>
+        <button type="submit">Submit</button>
+    </td>
+</table>
+<br>
+<br>
+<br>
+<table align="center" width="600px">
+    <th>Message</th>
+    <th>User</th>
+    {{#replies}}
+    <tr>
+        <td>{{text}}</td>
+        <td>{{author}}</td>
+    </tr>
+    {{/replies}}
+{{/message}}
+</table>
+</body>
+</html>

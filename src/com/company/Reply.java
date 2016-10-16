@@ -13,6 +13,13 @@ public class Reply {
     public Reply() {
     }
 
+    public Reply(String text, String author, int messageID, int userID) {
+        this.text = text;
+        this.author = author;
+        this.messageID = messageID;
+        this.userID = userID;
+    }
+
     public Reply(int id, String text, String author, int userID) {
         this.id = id;
         this.text = text;
