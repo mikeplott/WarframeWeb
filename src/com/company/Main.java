@@ -18,7 +18,11 @@ public class Main {
         Server.createWebServer().start();
         Connection conn = DriverManager.getConnection("jdbc:h2:./warframe");
         createTables(conn);
-        //fileImport(conn);
+
+        ArrayList<Item> items = itemsList(conn);
+        if (items.size() == 0) {
+            fileImport(conn);
+        }
 
         Spark.get(
                 "/",
@@ -150,6 +154,17 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.get(
+                "/forum",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    HashMap m = new HashMap();
+                    return new ModelAndView(null, "forum.html");
+                },
+                new MustacheTemplateEngine()
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -246,6 +261,8 @@ public class Main {
         stmt.execute("CREATE TABLE IF NOT EXISTS users (id IDENTITY, name VARCHAR, password VARCHAR)");
         stmt.execute("CREATE TABLE IF NOT EXISTS user_items (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR, quantity INT, user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS item_list (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS messages (id IDENTITY, text VARCHAR, author VARCHAR, user_id INT)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS replies (id IDENTITY, text VARCHAR, author VARCHAR, user_id INT)");
     }
 
     public static void insertItem(Connection conn, String name, String category, String relic) throws SQLException {
@@ -269,6 +286,28 @@ public class Main {
         stmt.execute();
     }
 
+    public static void insertMessage(Connection conn, String text, String author, int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO messages VALUES(NULL, ?, ?, ?)");
+        stmt.setString(1, text);
+        stmt.setString(2, author);
+        stmt.setInt(3, uID);
+        stmt.execute();
+    }
+
+    public static Message selectMessage(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM messages WHERE user_id = ?");
+        stmt.setInt(1, id);
+        ResultSet results = stmt.executeQuery();
+        if (results.next()) {
+            int mID = results.getInt("id");
+            String text = results.getString("text");
+            String author = results.getString("author");
+            int uID = results.getInt("user_id");
+            return new Message(mID, text, author, new ArrayList<Reply>(), uID);
+        }
+        return null;
+    }
+
     public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {
         File f = new File("items.txt");
         Scanner fileScanner = new Scanner(f);
@@ -285,5 +324,4 @@ public class Main {
             insertItem(conn, name, category, relic);
         }
     }
-
 }

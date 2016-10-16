@@ -61,6 +61,16 @@ public class MainTest {
         assertTrue(item != null);
     }
 
+    @Test
+    public void testInsertMessage() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        Main.insertMessage(conn, "Hello!", user.name, user.id);
+        Message message = Main.selectMessage(conn, user.id);
+        assertTrue(message != null);
+    }
+
 //    @Test
 //    public void testDelete() throws SQLException {
 //        Connection conn = startConnection();
