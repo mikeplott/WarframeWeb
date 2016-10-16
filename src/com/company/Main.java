@@ -221,6 +221,29 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.post(
+                "/delete-message",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    String id = request.queryParams("mID");
+                    int mID = Integer.parseInt(id);
+                    Message message = selectMessageById(conn, mID);
+                    if (message.userID == user.id) {
+                        deleteMessageReplies(conn, mID);
+                        deleteMessage(conn, mID);
+                        response.redirect("/forum");
+                        return null;
+                    }
+                    response.redirect("/forum");
+                    return null;
+                }
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -435,6 +458,24 @@ public class Main {
         return null;
     }
 
+    public static void deleteMessage(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM messages WHERE id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+    public static void deleteReply(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM replies WHERE id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+    public static void deleteMessageReplies(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM replies WHERE message_id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
+    }
+
     public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {
         File f = new File("items.txt");
         Scanner fileScanner = new Scanner(f);
@@ -444,10 +485,6 @@ public class Main {
             String name = columns[0];
             String category = columns[1];
             String relic = columns[2];
-            if (relic.isEmpty()) {
-                relic = null;
-                insertItem(conn, name, category, relic);
-            }
             insertItem(conn, name, category, relic);
         }
     }
