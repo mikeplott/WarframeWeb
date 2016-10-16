@@ -166,6 +166,19 @@ public class Main {
                 },
                 new MustacheTemplateEngine()
         );
+
+        Spark.post(
+                "/forum",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+
+                    HashMap m = new HashMap();
+                    m.put("name", name);
+                    return new ModelAndView(m, "forum.html");
+                },
+                new MustacheTemplateEngine()
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -331,6 +344,39 @@ public class Main {
             return new Reply(rID, text, author, mID, uID);
         }
         return null;
+    }
+
+    public static ArrayList<Reply> selectAllReplies(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM replies WHERE message_id = ?");
+        stmt.setInt(1, id);
+        ArrayList<Reply> replies = new ArrayList<>();
+        ResultSet results = stmt.executeQuery();
+        while (results.next()) {
+            int rID = results.getInt("id");
+            String text = results.getString("text");
+            String author = results.getString("author");
+            int mID = results.getInt("message_id");
+            int uID = results.getInt("user_id");
+            Reply reply = new Reply(rID, text, author, mID, uID);
+            replies.add(reply);
+        }
+        return replies;
+    }
+
+    public static ArrayList<Message> selectAllMessages(Connection conn) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM messages");
+        ArrayList<Message> messages = new ArrayList<>();
+        ResultSet results = stmt.executeQuery();
+        while (results.next()) {
+            int id = results.getInt("id");
+            String text = results.getString("text");
+            String author = results.getString("author");
+            int uID = results.getInt("user_id");
+            Message message = new Message(id, text, author, new ArrayList<>(), uID);
+            message.replies = selectAllReplies(conn, message.id);
+            messages.add(message);
+        }
+        return messages;
     }
 
     public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {

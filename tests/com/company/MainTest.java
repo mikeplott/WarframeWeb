@@ -33,7 +33,7 @@ public class MainTest {
         Main.insertUser(conn, "Mike", "123");
         User user = Main.selectUser(conn, "Mike");
         Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 3, user.id);
-        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
+        Main.insertUserItem(conn, "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
         ArrayList userItems = Main.userList(conn, user.id);
         conn.close();
         assertTrue(userItems.size() == 2);
@@ -45,7 +45,7 @@ public class MainTest {
         Main.insertUser(conn, "Mike", "123");
         User user = Main.selectUser(conn, "Mike");
         Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 3, user.id);
-        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
+        Main.insertUserItem(conn, "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
         Item item = Main.selectUserItem(conn, 1);
         conn.close();
         assertTrue(item != null);
@@ -55,7 +55,7 @@ public class MainTest {
     public void testInsertItem() throws SQLException {
         Connection conn = startConnection();
         Main.insertItem(conn, "lsjdf", "ljkdalf", "adjflaf");
-        Main.insertItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja");
+        Main.insertItem(conn, "daslfjlja", "lakjsdfasfl", "akjsdlfja");
         Item item = Main.selectItem(conn, 1);
         conn.close();
         assertTrue(item != null);
@@ -85,13 +85,55 @@ public class MainTest {
         assertTrue(reply != null);
     }
 
+    @Test
+    public void testRepliesInMessages() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        Main.insertUser(conn, "NotMike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        User user2 = Main.selectUser(conn, "NotMike");
+        Main.insertMessage(conn, "Hello!", user.name, user.id);
+        Message message = Main.selectMessage(conn, user.id);
+        Main.insertReply(conn, "Oh hi there!", user2.name, message.id, user2.id);
+        Main.insertReply(conn, "Hi Mike!", user2.name, message.id, user2.id);
+        Main.insertReply(conn, "Hi NotMike!", user.name, message.id, user.id);
+        message.replies = Main.selectAllReplies(conn, message.id);
+        conn.close();
+        assertTrue(message.replies.size() == 3);
+    }
+
+    @Test
+    public void testSelectAllMessages() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        Main.insertUser(conn, "NotMike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        User user2 = Main.selectUser(conn, "NotMike");
+        Main.insertMessage(conn, "Hello!", user.name, user.id);
+        Main.insertMessage(conn, "Oh hi everyone!", user2.name, user2.id);
+        Message message = Main.selectMessage(conn, user.id);
+        Main.insertReply(conn, "Oh hi there!", user2.name, message.id, user2.id);
+        Main.insertReply(conn, "Hi Mike!", user2.name, message.id, user2.id);
+        Main.insertReply(conn, "Hi NotMike!", user.name, message.id, user.id);
+        Message message1 = Main.selectMessage(conn, user2.id);
+        Main.insertReply(conn, "Oh hi there!", user2.name, message1.id, user2.id);
+        Main.insertReply(conn, "Hi Mike!", user2.name, message1.id, user2.id);
+        Main.insertReply(conn, "Hi NotMike!", user.name, message1.id, user.id);
+        message.replies = Main.selectAllReplies(conn, message.id);
+        message1.replies = Main.selectAllReplies(conn, message1.id);
+        ArrayList<Message> messages = Main.selectAllMessages(conn);
+        conn.close();
+        assertTrue(messages.size() == 2);
+    }
+}
+
 //    @Test
 //    public void testDelete() throws SQLException {
 //        Connection conn = startConnection();
 //        Main.insertUser(conn, "Mike", "123");
 //        User user = Main.selectUser(conn, "Mike");
-//        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", user.id);
-//        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", user.id);
+//        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 2, user.id);
+//        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
 //        Item item = Main.selectUserItem(conn, 1);
 //        if (item.userID == user.id) {
 //            Main.deleteUserItem(conn, item.id);
@@ -99,4 +141,3 @@ public class MainTest {
 //        ArrayList<Item> userItems = Main.userList(conn, user.id);
 //        assertTrue(userItems.size() == 1);
 //    }
-}
