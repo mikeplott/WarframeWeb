@@ -160,8 +160,23 @@ public class Main {
                 (request, response) -> {
                     Session session = request.session();
                     String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    boolean isMine = false;
                     HashMap m = new HashMap();
                     ArrayList<Message> messages = selectAllMessages(conn);
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).author == user.name) {
+                            isMine = true;
+                            m.put("isMine", isMine);
+                        }
+                        else{
+                            isMine = false;
+                            m.put("isMine", isMine);
+                        }
+                    }
                     m.put("name", name);
                     m.put("messages", messages);
                     return new ModelAndView(m, "forum.html");
@@ -240,6 +255,43 @@ public class Main {
                         response.redirect("/forum");
                         return null;
                     }
+                    response.redirect("/forum");
+                    return null;
+                }
+        );
+
+        Spark.get(
+                "/edit-message",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    String id = request.queryParams("id");
+                    int mID = Integer.parseInt(id);
+                    Message message = selectMessageById(conn, mID);
+                    if (message.userID != user.id) {
+                        response.redirect("/forum");
+                    }
+                    HashMap m = new HashMap();
+                    m.put("message", message);
+                    return new ModelAndView(m, "edit-message.html");
+                },
+                new MustacheTemplateEngine()
+        );
+
+        Spark.post(
+                "/edit-message",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    String id = request.queryParams("id");
+                    int mID = Integer.parseInt(id);
+                    String text = request.queryParams("newText");
+                    updateMessage(conn, text, mID);
                     response.redirect("/forum");
                     return null;
                 }
@@ -473,6 +525,13 @@ public class Main {
     public static void deleteMessageReplies(Connection conn, int id) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM replies WHERE message_id = ?");
         stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+    public static void updateMessage(Connection conn, String text, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("UPDATE messages SET text = ? WHERE id = ?");
+        stmt.setString(1, text);
+        stmt.setInt(2, id);
         stmt.execute();
     }
 

@@ -31,13 +31,20 @@ Welcome {{name}}!
         <td>{{text}}</td>
         <td>{{author}}</td>
         <td><a href="/message?id={{id}}">Replies</a> </td>
-        <td><a href="/edit-message?id={{id}}">Edit</a></td>
         <td>
+            {{#isMine}}
+            <a href="/edit-message?id={{id}}">Edit</a>
+
+        </td>
+        <td>
+
             <form action="/delete-message" method="post">
                 <input type="hidden" value="{{id}}" name="mID">
                 <button type="submit">Delete</button>
             </form>
+            {{/isMine}}
         </td>
+
     </tr>
 {{/messages}}
 </table>

@@ -1,0 +1,19 @@
+<html>
+<body>
+{{#message}}
+<h3 align="center">Edit your message</h3>
+<table>
+    <th>{{text}}</th>
+    <tr>
+        <td>
+            <form action="/edit-message" method="post">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="text" name="newText">
+                <button type="submit">Submit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+{{/message}}
+</body>
+</html>

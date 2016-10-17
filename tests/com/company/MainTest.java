@@ -151,6 +151,19 @@ public class MainTest {
         conn.close();
         assertTrue(messages.size() == 1);
     }
+
+    @Test
+    public void testMessageUpdate() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        Main.insertMessage(conn, "Hello!", user.name, user.id);
+        Message message = Main.selectMessage(conn, user.id);
+        Main.updateMessage(conn, "Test", message.id);
+        Message message1 = Main.selectMessage(conn, user.id);
+        conn.close();
+        assertTrue(message1.text.equals("Test"));
+    }
 }
 
 //    @Test
