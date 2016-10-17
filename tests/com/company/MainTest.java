@@ -187,44 +187,15 @@ public class MainTest {
         assertTrue(user1 == null);
     }
 
+    @Test
+    public void testUpdateUserPass() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        Main.updateUserPass(conn, "321", user.id);
+        User user1 = Main.selectUser(conn, "Mike");
+        conn.close();
+        assertTrue(user1.password.equals("321"));
+    }
+
 }
-
-//    @Test
-//    public void testDeleteReplies() throws SQLException {
-//        Connection conn = startConnection();
-//        Main.insertUser(conn, "Mike", "123");
-//        Main.insertUser(conn, "NotMike", "123");
-//        User user = Main.selectUser(conn, "Mike");
-//        User user2 = Main.selectUser(conn, "NotMike");
-//        Main.insertMessage(conn, "Hello!", user.name, user.id);
-//        Main.insertMessage(conn, "Oh hi everyone!", user2.name, user2.id);
-//        Message message = Main.selectMessage(conn, user.id);
-//        Main.insertReply(conn, "Oh hi there!", user2.name, message.id, user2.id);
-//        Main.insertReply(conn, "Hi Mike!", user2.name, message.id, user2.id);
-//        Main.insertReply(conn, "Hi NotMike!", user.name, message.id, user.id);
-//        Message message1 = Main.selectMessage(conn, user2.id);
-//        Main.insertReply(conn, "Oh hi there!", user2.name, message1.id, user2.id);
-//        Main.insertReply(conn, "Hi Mike!", user2.name, message1.id, user2.id);
-//        Main.insertReply(conn, "Hi NotMike!", user.name, message1.id, user.id);
-//        message.replies = Main.selectAllReplies(conn, message.id);
-//        message1.replies = Main.selectAllReplies(conn, message1.id);
-//        Main.deleteMessageReplies(conn, message1.id);
-//        ArrayList<Reply> replies = message1.replies;
-//        conn.close();
-//        assertTrue(replies == null);
-//    }
-
-//    @Test
-//    public void testDelete() throws SQLException {
-//        Connection conn = startConnection();
-//        Main.insertUser(conn, "Mike", "123");
-//        User user = Main.selectUser(conn, "Mike");
-//        Main.insertUserItem(conn, "lsjdf", "ljkdalf", "adjflaf", 2, user.id);
-//        Main.insertUserItem(conn , "daslfjlja", "lakjsdfasfl", "akjsdlfja", 3, user.id);
-//        Item item = Main.selectUserItem(conn, 1);
-//        if (item.userID == user.id) {
-//            Main.deleteUserItem(conn, item.id);
-//        }
-//        ArrayList<Item> userItems = Main.userList(conn, user.id);
-//        assertTrue(userItems.size() == 1);
-//    }

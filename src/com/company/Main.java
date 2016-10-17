@@ -1,7 +1,5 @@
 package com.company;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import com.sun.tools.internal.ws.processor.model.Model;
 import org.h2.tools.Server;
 import spark.ModelAndView;
 import spark.Session;
@@ -331,7 +329,8 @@ public class Main {
                     HashMap m = new HashMap();
                     m.put("user", user);
                     return new ModelAndView(m, "user.html");
-                }
+                },
+                new MustacheTemplateEngine()
         );
 
         Spark.post(
@@ -348,9 +347,51 @@ public class Main {
                         deleteMessageReplies(conn, message.id);
                         deleteMessage(conn, message.id);
                     }
+                    ArrayList<Item> userList = userList(conn, user.id);
+                    for (Item item : userList) {
+                        deleteUserItem(conn, item.id);
+                    }
+                    deleteUser(conn, user.id);
+                    session.invalidate();
+                    response.redirect("/");
                     return null;
                 }
         );
+
+        Spark.post(
+                "/edit-username",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    String username = request.queryParams("username");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    updateUserName(conn, username, user.id);
+                    session.invalidate();
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/edit-password",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    String password = request.queryParams("password");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    updateUserPass(conn, password, user.id);
+                    session.invalidate();
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -617,6 +658,13 @@ public class Main {
     public static void deleteUser(Connection conn, int uID) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE id = ?");
         stmt.setInt(1, uID);
+        stmt.execute();
+    }
+
+    public static void updateUserPass(Connection conn, String password, int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("UPDATE users SET password = ? WHERE id = ?");
+        stmt.setString(1, password);
+        stmt.setInt(2, uID);
         stmt.execute();
     }
 
