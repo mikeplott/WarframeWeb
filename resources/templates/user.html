@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <h3>Edit your user information. Deleting your account will delete all information with it from the database</h3>
+    {{#user}}
+    <h3>Welcome {{name}}! You can edit your user information here, be aware deleting your account will delete all information with it from the database</h3>
 </head>
 <body>
-
+<table>
+    <tr>
+        <td>{{name}}</td>
+        <td>{{password}}</td>
+        <td>
+            <form action="/delete-user" method="post">
+                <input type="hidden" value="{{id}}" name="id">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <form action="/edit-username" method="post">
+        <td>
+            <input type="text" placeholder="Enter new username" name="username">
+        </td>
+        <td>
+            <button type="submit">Submit</button>
+        </td>
+        </form>
+    </tr>
+    <tr></tr>
+    <tr>
+        <form action="/edit-password" method="post">
+        <td>
+            <input type="password" placeholder="Enter new password" name="password">
+        </td>
+            <td>
+                <button type="submit">Submit</button>
+            </td>
+        </form>
+    </tr>
+</table>
 </body>
+{{/user}}
 </html>

@@ -329,8 +329,26 @@ public class Main {
                         Spark.halt(403);
                     }
                     HashMap m = new HashMap();
-                    m.put("name", name);
+                    m.put("user", user);
                     return new ModelAndView(m, "user.html");
+                }
+        );
+
+        Spark.post(
+                "/delete-user",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    ArrayList<Message> messages = selectAllUserMessages(conn, user.id);
+                    for (Message message : messages) {
+                        deleteMessageReplies(conn, message.id);
+                        deleteMessage(conn, message.id);
+                    }
+                    return null;
                 }
         );
     }
@@ -593,6 +611,12 @@ public class Main {
         PreparedStatement stmt = conn.prepareStatement("UPDATE users SET name = ? WHERE id = ?");
         stmt.setString(1, username);
         stmt.setInt(2, id);
+        stmt.execute();
+    }
+
+    public static void deleteUser(Connection conn, int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE id = ?");
+        stmt.setInt(1, uID);
         stmt.execute();
     }
 

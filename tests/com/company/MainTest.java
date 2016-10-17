@@ -176,6 +176,17 @@ public class MainTest {
         assertTrue(user1 != null);
     }
 
+    @Test
+    public void testDeleteUser() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        Main.deleteUser(conn, user.id);
+        User user1 = Main.selectUser(conn, "Mike");
+        conn.close();
+        assertTrue(user1 == null);
+    }
+
 }
 
 //    @Test
