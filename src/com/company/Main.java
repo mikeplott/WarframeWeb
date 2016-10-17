@@ -1,5 +1,7 @@
 package com.company;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.sun.tools.internal.ws.processor.model.Model;
 import org.h2.tools.Server;
 import spark.ModelAndView;
 import spark.Session;
@@ -296,6 +298,41 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.get(
+                "/profile",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    ArrayList<Message> messages = selectAllUserMessages(conn, user.id);
+                    ArrayList<Item> userItems = userList(conn, user.id);
+                    HashMap m = new HashMap();
+                    m.put("name", name);
+                    m.put("messages", messages);
+                    m.put("userList", userItems);
+                    return new ModelAndView(m, "profile.html");
+                },
+                new MustacheTemplateEngine()
+        );
+
+        Spark.get(
+                "/edit-user",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn, name);
+                    if (user == null) {
+                        Spark.halt(403);
+                    }
+                    HashMap m = new HashMap();
+                    m.put("name", name);
+                    return new ModelAndView(m, "user.html");
+                }
+        );
     }
 
     public static void insertUser(Connection conn, String name, String pass) throws SQLException {
@@ -508,6 +545,23 @@ public class Main {
             return new Message(id, text, author, replies, uID);
         }
         return null;
+    }
+
+    public static ArrayList<Message> selectAllUserMessages(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM messages WHERE user_id = ?");
+        stmt.setInt(1, id);
+        ArrayList<Message> messages = new ArrayList<>();
+        ResultSet results = stmt.executeQuery();
+        while (results.next()) {
+            int mID = results.getInt("id");
+            String text = results.getString("text");
+            String author = results.getString("author");
+            ArrayList<Reply> replies = selectAllReplies(conn, mID);
+            int uID = results.getInt("user_id");
+            Message message = new Message(mID, text, author, replies, uID);
+            messages.add(message);
+        }
+        return messages;
     }
 
     public static void deleteMessage(Connection conn, int id) throws SQLException {

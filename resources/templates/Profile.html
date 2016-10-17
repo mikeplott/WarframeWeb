@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{{#name}}
+<h3> Welcome {{name}}! this is your profile where you can see your items and the messages and replies you have made on the forums!</h3>
+<br>
+<br>
+<a href="/edit-user">CHANGE USERNAME</a>
+<br>
+<a href="/edit-user">CHANGE PASSWORD</a>
+<br>
+<a href="/edit-user">DELETE ACCOUNT</a>
+<br>
+<br>
+<br>
+<body>
+<table align="left" width="600px" border="1px">
+    <th colspan="5">{{name}}'s Items</th>
+    <tr>
+        <td>Item Name</td>
+        <td>Category</td>
+        <td>Void Relic</td>
+        <td>Quantity</td>
+        <td></td>
+    </tr>
+{{#userList}}
+<tr>
+    <td>{{name}}</td>
+    <td>{{category}}</td>
+    <td>{{voidRelic}}</td>
+    <td>{{quantity}}</td>
+    <td>
+        <form method="get" action="/edit-item">
+            <input type="hidden" value="{{id}}" name="editID">
+            <button type="submit">Edit</button>
+        </form>
+    </td>
+    <td>
+        <form method="post" action="/delete-item">
+            <input type="hidden" value="{{id}}" name="id">
+            <button type="submit">Delete</button>
+        </form>
+    </td>
+</tr>
+{{/userList}}
+</table>
+<table align="right" width="600px" border="1px">
+    <th>Messages</th>
+    <th>Replies</th>
+    <th colspan="3">Modify</th>
+{{#messages}}
+<tr>
+    <td>{{text}}</td>
+    <td><a href="/message?id={{id}}">Replies</a> </td>
+    <td>
+        <a href="/edit-message?id={{id}}">Edit</a>
+    </td>
+    <td>
+        <form action="/delete-message" method="post">
+            <input type="hidden" value="{{id}}" name="mID">
+            <button type="submit">Delete</button>
+        </form>
+    </td>
+</tr>
+{{/messages}}
+</table>
+</body>
+{{/name}}
+</html>
