@@ -589,6 +589,13 @@ public class Main {
         stmt.execute();
     }
 
+    public static void updateUserName(Connection conn, String username, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("UPDATE users SET name = ? WHERE id = ?");
+        stmt.setString(1, username);
+        stmt.setInt(2, id);
+        stmt.execute();
+    }
+
     public static void fileImport(Connection conn) throws FileNotFoundException, SQLException {
         File f = new File("items.txt");
         Scanner fileScanner = new Scanner(f);

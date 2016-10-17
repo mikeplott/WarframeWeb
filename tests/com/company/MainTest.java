@@ -164,6 +164,18 @@ public class MainTest {
         conn.close();
         assertTrue(message1.text.equals("Test"));
     }
+
+    @Test
+    public void testUserNameUpdate() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Mike", "123");
+        User user = Main.selectUser(conn, "Mike");
+        Main.updateUserName(conn, "NotMike", user.id);
+        User user1 = Main.selectUser(conn, "NotMike");
+        conn.close();
+        assertTrue(user1 != null);
+    }
+
 }
 
 //    @Test
