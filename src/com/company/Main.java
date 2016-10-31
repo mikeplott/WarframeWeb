@@ -308,10 +308,12 @@ public class Main {
                     }
                     ArrayList<Message> messages = selectAllUserMessages(conn, user.id);
                     ArrayList<Item> userItems = userList(conn, user.id);
+                    ArrayList<String> buddies = selectAllBuddies(conn, user.id);
                     HashMap m = new HashMap();
                     m.put("name", name);
                     m.put("messages", messages);
                     m.put("userList", userItems);
+                    m.put("buddies", buddies);
                     return new ModelAndView(m, "profile.html");
                 },
                 new MustacheTemplateEngine()
@@ -490,6 +492,7 @@ public class Main {
         stmt.execute("CREATE TABLE IF NOT EXISTS item_list (id IDENTITY, name VARCHAR, category VARCHAR, void_relic VARCHAR)");
         stmt.execute("CREATE TABLE IF NOT EXISTS messages (id IDENTITY, text VARCHAR, author VARCHAR, user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS replies (id IDENTITY, text VARCHAR, author VARCHAR, message_id INT ,user_id INT)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS buddies (id IDENTITY, name VARCHAR, user_id INT)");
     }
 
     public static void insertItem(Connection conn, String name, String category, String relic) throws SQLException {
@@ -665,6 +668,43 @@ public class Main {
         PreparedStatement stmt = conn.prepareStatement("UPDATE users SET password = ? WHERE id = ?");
         stmt.setString(1, password);
         stmt.setInt(2, uID);
+        stmt.execute();
+    }
+
+    public static void insertBuddy(Connection conn, String name, int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO buddies (NULL, ?, ?)");
+        stmt.setString(1, name);
+        stmt.setInt(2, uID);
+        stmt.execute();
+    }
+
+    public static ArrayList<String> selectAllBuddies(Connection conn, int uID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM buddies INNER JOIN users ON buddies buddies.user_id = users.user_id WHERE buddies.user_id = ?");
+        stmt.setInt(1, uID);
+        ArrayList<String> buddies = new ArrayList<>();
+        ResultSet results = stmt.executeQuery();
+        while (results.next()) {
+            String name = results.getString("name");
+            buddies.add(name);
+        }
+        return buddies;
+    }
+
+    public static String selectOneBuddy(Connection conn, String name, int userID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM buddies WHERE name = ? user_id = ?");
+        stmt.setString(1, name);
+        stmt.setInt(2, userID);
+        ResultSet results = stmt.executeQuery();
+        if (results.next()) {
+            return name;
+        }
+        return null;
+    }
+
+    public static void deleteBuddy(Connection conn, String name, int userID) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM buddies WHERE buddies.user_id = ? buddies.name = ?");
+        stmt.setInt(1, userID);
+        stmt.setString(2, name);
         stmt.execute();
     }
 
